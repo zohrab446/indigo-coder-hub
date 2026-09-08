@@ -1127,3 +1127,15 @@ export function getLesson(level: number): Lesson | undefined {
 export function categoryOf(level: number) {
   return CATEGORIES.find((c) => level >= c.from && level <= c.to) ?? CATEGORIES[0];
 }
+
+/**
+ * Her kategori (dil) bağımsız başlar: istediğin dilin ilk dersi her zaman açıktır.
+ * Kategori içinde ilerlemek için önceki dersi bitirmek gerekir.
+ */
+export function isLessonUnlocked(level: number, completed: Set<number> | number[]): boolean {
+  const done = completed instanceof Set ? completed : new Set(completed);
+  if (done.has(level)) return true;
+  const category = categoryOf(level);
+  if (!category || level <= category.from) return true;
+  return done.has(level - 1);
+}
