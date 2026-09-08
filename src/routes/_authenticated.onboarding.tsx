@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { createFileRoute as _unused } from "@tanstack/react-router";
 import { AVATAR_COLORS, AVATAR_SHAPES, SHAPE_GLYPH, avatarHex } from "@/lib/gamification";
 import { useProfile, useUpdateProfile } from "@/hooks/useGameData";
 import { PlayerAvatar } from "@/components/PlayerAvatar";
@@ -11,8 +10,6 @@ import { Label } from "@/components/ui/label";
 import { useThemeSync } from "@/components/AppShell";
 import { playSound } from "@/store/settings";
 import { cn } from "@/lib/utils";
-
-void _unused;
 
 export const Route = createFileRoute("/_authenticated/onboarding")({
   head: () => ({
