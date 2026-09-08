@@ -80,7 +80,7 @@ export const PYTHON_A: Lesson[] = [
     example: `name = "Ada"\nprint(f"Merhaba {name}")`,
     hints: [
       "age adında bir değişkene bir sayı ata.",
-      `f-string ile bir metin oluştur.",
+      "f-string ile bir metin oluştur.",
       `age = 15\nprint(f"Yaşım {age}")`,
     ],
     challenge: `age adlı değişkene bir sayı ata ve f-string kullanarak "Yaşım 15" gibi bir çıktı ver.`,

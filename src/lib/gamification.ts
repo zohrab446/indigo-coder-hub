@@ -1,4 +1,4 @@
-import { MAX_LEVEL } from "@/data/lessons";
+import { MAX_LEVEL, TRACKS } from "@/data/types";
 
 export const AVATAR_SHAPES = ["star", "circle", "square", "triangle"] as const;
 export type AvatarShape = (typeof AVATAR_SHAPES)[number];
@@ -64,14 +64,23 @@ export type BadgeDef = {
 };
 
 export const BADGES: BadgeDef[] = [
+  { id: "first-step", emoji: "🌱", title: "İlk Adım", description: "İlk dersini tamamla" },
   { id: "week-warrior", emoji: "🔥", title: "Hafta Savaşçısı", description: "7 gün üst üste çalış" },
   { id: "century", emoji: "💯", title: "Yüzlük", description: "100 XP topla" },
-  { id: "html-master", emoji: "🎓", title: "HTML Ustası", description: "Tüm HTML derslerini bitir" },
-  { id: "css-master", emoji: "🎨", title: "CSS Sanatçısı", description: "Tüm CSS derslerini bitir" },
   { id: "speedrunner", emoji: "🚀", title: "Hız Ustası", description: "Bir dersi 2 dakikada bitir" },
-  { id: "level-10", emoji: "⭐", title: "Seviye 10", description: "10. seviyeye ulaş" },
+  { id: "level-10", emoji: "⭐", title: "Seviye 10", description: "10 ders tamamla" },
+  { id: "level-50", emoji: "🌟", title: "Seviye 50", description: "50 ders tamamla" },
+  { id: "level-100", emoji: "💫", title: "Seviye 100", description: "100 ders tamamla" },
   { id: "consistent-coder", emoji: "💪", title: "İstikrarlı Kodcu", description: "30 gün seri yap" },
-  { id: "polyglot", emoji: "🌍", title: "Çok Dilli", description: "4 farklı dilde ders bitir" },
+  { id: "polyglot", emoji: "🌍", title: "Çok Dilli", description: "4 farklı track'te ders bitir" },
+  { id: "html-master", emoji: "🧱", title: "HTML Ustası", description: "Tüm HTML derslerini bitir" },
+  { id: "css-master", emoji: "🎨", title: "CSS Sanatçısı", description: "Tüm CSS derslerini bitir" },
+  { id: "javascript-master", emoji: "⚡", title: "JavaScript Büyücüsü", description: "Tüm JavaScript derslerini bitir" },
+  { id: "react-master", emoji: "⚛️", title: "React Mimarı", description: "Tüm React derslerini bitir" },
+  { id: "python-master", emoji: "🐍", title: "Python Terbiyecisi", description: "Tüm Python derslerini bitir" },
+  { id: "cpp-master", emoji: "⚙️", title: "C++ Mühendisi", description: "Tüm C++ derslerini bitir" },
+  { id: "java-master", emoji: "☕", title: "Java Baristası", description: "Tüm Java derslerini bitir" },
+  { id: "grandmaster", emoji: "👑", title: "Büyük Usta", description: "320 seviyenin tamamını bitir" },
 ];
 
 export type BadgeContext = {
@@ -84,19 +93,23 @@ export type BadgeContext = {
 };
 
 export function earnedBadgeIds(ctx: BadgeContext): string[] {
+  const done = new Set(ctx.completedLevels);
   const has = (from: number, to: number) => {
-    for (let l = from; l <= to; l++) if (!ctx.completedLevels.includes(l)) return false;
+    for (let l = from; l <= to; l++) if (!done.has(l)) return false;
     return true;
   };
   const ids: string[] = [];
+  if (done.size >= 1) ids.push("first-step");
   if (ctx.streak >= 7) ids.push("week-warrior");
   if (ctx.xp >= 100) ids.push("century");
-  if (has(1, 5)) ids.push("html-master");
-  if (has(6, 10)) ids.push("css-master");
   if (ctx.fastestSeconds !== null && ctx.fastestSeconds <= 120) ids.push("speedrunner");
-  if (ctx.level >= 10) ids.push("level-10");
+  if (done.size >= 10) ids.push("level-10");
+  if (done.size >= 50) ids.push("level-50");
+  if (done.size >= 100) ids.push("level-100");
   if (ctx.streak >= 30) ids.push("consistent-coder");
   if (new Set(ctx.languagesCompleted).size >= 4) ids.push("polyglot");
+  for (const track of TRACKS) if (has(track.from, track.to)) ids.push(`${track.id}-master`);
+  if (done.size >= MAX_LEVEL) ids.push("grandmaster");
   return ids;
 }
 
