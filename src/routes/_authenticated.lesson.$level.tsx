@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
-import { LANGUAGE_META, MAX_LEVEL, getLesson } from "@/data/lessons";
+import { LANGUAGE_META, MAX_LEVEL, getLesson, isLessonUnlocked } from "@/data/lessons";
 import { gradeSubmission, runCode, type CheckResult, type RunResult } from "@/lib/runner";
 import { useCompleteLesson, useProfile, useProgress, type CompletionReward } from "@/hooks/useGameData";
 import { BADGES } from "@/lib/gamification";

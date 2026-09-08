@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Check, Coins, Flame, Lock, Play, Trophy, Zap } from "lucide-react";
-import { CATEGORIES, LANGUAGE_META, LESSONS, MAX_LEVEL } from "@/data/lessons";
+import { CATEGORIES, LANGUAGE_META, LESSONS, MAX_LEVEL, isLessonUnlocked } from "@/data/lessons";
 import {
   nextLessonLevel,
   useLeaderboard,
@@ -139,7 +139,7 @@ function Dashboard() {
                 <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                   {LESSONS.filter((l) => l.level >= category.from && l.level <= category.to).map((lesson) => {
                     const isDone = completed.has(lesson.level);
-                    const isLocked = !isDone && lesson.level > profile.level;
+                    const isLocked = !isLessonUnlocked(lesson.level, completed);
                     return (
                       <LessonCard
                         key={lesson.id}
