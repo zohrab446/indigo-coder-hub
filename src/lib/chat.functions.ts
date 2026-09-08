@@ -42,24 +42,25 @@ export const sendChatMessage = createServerFn({ method: "POST" })
         system,
         messages: data.messages,
       });
-      return { reply: await result.text };
+      return { reply: await result.text, ok: true };
     } catch (error) {
       const message = error instanceof Error ? error.message : "Bilinmeyen hata";
-      const status = (error as { statusCode?: number; status?: number }).statusCode ??
-        (error as { status?: number }).status ?? 0;
-      const has = (code: string, text: string) => status === Number(code) || message.includes(code) || message.toLowerCase().includes(text);
+      const status =
+        (error as { statusCode?: number }).statusCode ?? (error as { status?: number }).status ?? 0;
+      const has = (code: number, text: string) =>
+        status === code || message.includes(String(code)) || message.toLowerCase().includes(text);
 
-      if (has("402", "payment required")) {
-        throw new Error(
-          "Yapay zekâ kredisi tükenmiş görünüyor. Uygulama sahibinin kredi eklemesi gerekiyor; o zamana kadar dersleri normal şekilde çözebilirsin.",
-        );
+      console.error("[chat] gateway error", status, message);
+
+      let reply = `Asistan şu an cevap veremedi. Birazdan tekrar dener misin?`;
+      if (has(402, "payment required")) {
+        reply =
+          "Yapay zekâ kredisi tükenmiş görünüyor. Uygulama sahibinin kredi eklemesi gerekiyor; o zamana kadar ders ipuçlarını kullanabilirsin. 💡";
+      } else if (has(403, "forbidden")) {
+        reply = "Yapay zekâ asistanı şu an kapalı. Uygulama sahibinin ayarları açması gerekiyor.";
+      } else if (has(429, "too many requests")) {
+        reply = "Şu an çok yoğunum, birkaç saniye sonra tekrar dener misin?";
       }
-      if (has("403", "forbidden")) {
-        throw new Error("Yapay zekâ asistanı şu an kapalı. Uygulama sahibinin ayarları açması gerekiyor.");
-      }
-      if (has("429", "too many requests")) {
-        throw new Error("Şu an çok yoğunum, birkaç saniye sonra tekrar dener misin?");
-      }
-      throw new Error(`Asistan şu an cevap veremedi: ${message}`);
+      return { reply, ok: false };
     }
   });
