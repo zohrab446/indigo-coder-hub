@@ -216,3 +216,12 @@
     transform: translateY(-6px);
   }
 }
+
+@utility code-block {
+  border-radius: var(--radius-lg);
+  background-color: var(--color-code-bg, oklch(0.24 0.04 264));
+  color: oklch(0.96 0.01 250);
+  padding: 0.875rem 1rem;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  line-height: 1.6;
+}
