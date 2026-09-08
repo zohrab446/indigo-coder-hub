@@ -45,10 +45,19 @@ export const sendChatMessage = createServerFn({ method: "POST" })
       return { reply: await result.text };
     } catch (error) {
       const message = error instanceof Error ? error.message : "Bilinmeyen hata";
-      if (message.includes("402")) {
-        throw new Error("Yapay zekâ kredisi tükendi. Uygulama sahibinin kredi eklemesi gerekiyor.");
+      const status = (error as { statusCode?: number; status?: number }).statusCode ??
+        (error as { status?: number }).status ?? 0;
+      const has = (code: string, text: string) => status === Number(code) || message.includes(code) || message.toLowerCase().includes(text);
+
+      if (has("402", "payment required")) {
+        throw new Error(
+          "Yapay zekâ kredisi tükenmiş görünüyor. Uygulama sahibinin kredi eklemesi gerekiyor; o zamana kadar dersleri normal şekilde çözebilirsin.",
+        );
       }
-      if (message.includes("429")) {
+      if (has("403", "forbidden")) {
+        throw new Error("Yapay zekâ asistanı şu an kapalı. Uygulama sahibinin ayarları açması gerekiyor.");
+      }
+      if (has("429", "too many requests")) {
         throw new Error("Şu an çok yoğunum, birkaç saniye sonra tekrar dener misin?");
       }
       throw new Error(`Asistan şu an cevap veremedi: ${message}`);
