@@ -68,8 +68,7 @@ function LessonPage() {
   const nextLevel = lesson ? Math.min(MAX_LEVEL, lesson.level + 1) : 1;
   const locked = useMemo(() => {
     if (!lesson || !profile) return false;
-    const done = new Set(progress.map((p) => p.level));
-    return !done.has(lesson.level) && lesson.level > profile.level;
+    return !isLessonUnlocked(lesson.level, progress.map((p) => p.level));
   }, [lesson, profile, progress]);
 
   if (!lesson || !meta) {
