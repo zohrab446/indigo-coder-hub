@@ -88,7 +88,7 @@ export function AppShell({
         <NavItem to="/profile" icon={<UserIcon className="h-5 w-5" />} label="Profil" stacked />
       </nav>
 
-      <ChatWidget lessonTitle={lessonTitle} />
+      <ChatWidget {...(lessonTitle ? { lessonTitle } : {})} />
     </div>
   );
 }
