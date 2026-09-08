@@ -64,7 +64,7 @@ export function ChatWidget({ lessonTitle }: { lessonTitle?: string }) {
       const history = nextMessages.filter((m) => m !== GREETING).slice(-12);
       const result = await ask({ data: { messages: history, lessonTitle } });
       setMessages((prev) => [...prev, { role: "assistant", content: result.reply }]);
-      if (user) {
+      if (user && result.ok) {
         void supabase
           .from("chat_messages")
           .insert({ user_id: user.id, role: "assistant", content: result.reply });
