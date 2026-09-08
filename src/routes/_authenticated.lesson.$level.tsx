@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { toast } from "sonner";
-import { LANGUAGE_META, MAX_LEVEL, getLesson } from "@/data/lessons";
+import { LANGUAGE_META, MAX_LEVEL, getLesson, isLessonUnlocked } from "@/data/lessons";
 import { gradeSubmission, runCode, type CheckResult, type RunResult } from "@/lib/runner";
 import { useCompleteLesson, useProfile, useProgress, type CompletionReward } from "@/hooks/useGameData";
 import { BADGES } from "@/lib/gamification";
@@ -68,8 +68,7 @@ function LessonPage() {
   const nextLevel = lesson ? Math.min(MAX_LEVEL, lesson.level + 1) : 1;
   const locked = useMemo(() => {
     if (!lesson || !profile) return false;
-    const done = new Set(progress.map((p) => p.level));
-    return !done.has(lesson.level) && lesson.level > profile.level;
+    return !isLessonUnlocked(lesson.level, progress.map((p) => p.level));
   }, [lesson, profile, progress]);
 
   if (!lesson || !meta) {
