@@ -225,16 +225,16 @@ function LessonPage() {
             variant="ghost"
             size="icon"
             aria-label="Yazı tipini küçült"
-            onClick={() => settings.setEditorFontSize(Math.max(11, settings.editorFontSize - 1))}
+            onClick={() => settings.setFontSize(Math.max(11, settings.fontSize - 1))}
           >
             <Minus className="h-4 w-4" />
           </Button>
-          <span className="w-6 text-center text-sm font-bold">{settings.editorFontSize}</span>
+          <span className="w-6 text-center text-sm font-bold">{settings.fontSize}</span>
           <Button
             variant="ghost"
             size="icon"
             aria-label="Yazı tipini büyült"
-            onClick={() => settings.setEditorFontSize(Math.min(24, settings.editorFontSize + 1))}
+            onClick={() => settings.setFontSize(Math.min(24, settings.fontSize + 1))}
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -257,7 +257,7 @@ function LessonPage() {
           theme={settings.editorTheme === "dark" ? "vs-dark" : "light"}
           onChange={(value) => setCode(value ?? "")}
           options={{
-            fontSize: settings.editorFontSize,
+            fontSize: settings.fontSize,
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
             tabSize: 2,
