@@ -118,7 +118,7 @@ export const JS_A: Lesson[] = [
     description: "Backtick ile metin içine değişken göm.",
     explanation:
       "Backtick (\\`) ile yazılan stringlere template literal denir. İçine \\${degisken} yazarak değişkenleri metnin içine gömebilirsin.\nBu, string birleştirmekten (+) daha okunaklıdır.",
-    example: `let name = "Ayşe";\nlet age = 14;\nconsole.log(\\`Merhaba \\${name}, \\${age} yaşındasın.\\`);`,
+    example: "let name = \"Ayşe\";\nlet age = 14;\nconsole.log(`Merhaba ${name}, ${age} yaşındasın.`);",
     hints: [
       "name ve age değişkenlerini tanımla.",
       "Backtick içinde \\${name} ve \\${age} kullan.",
