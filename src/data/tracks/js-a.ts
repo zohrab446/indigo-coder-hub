@@ -122,7 +122,7 @@ export const JS_A: Lesson[] = [
     hints: [
       "name ve age değişkenlerini tanımla.",
       "Backtick içinde \\${name} ve \\${age} kullan.",
-      `let name = "Zeynep"; let age = 16; console.log(\\`Merhaba \\${name}, \\${age} yaşındasın.\\`);`,
+      "let name = \"Zeynep\"; let age = 16; console.log(`Merhaba ${name}, ${age} yaşındasın.`);",
     ],
     challenge: "name=\"Zeynep\", age=16 tanımla; \"Merhaba Zeynep, 16 yaşındasın.\" çıktısını template literal ile yazdır.",
     files: [
