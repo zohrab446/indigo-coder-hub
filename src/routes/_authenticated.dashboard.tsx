@@ -118,42 +118,43 @@ function Dashboard() {
             <StatCard icon={<Zap className="h-5 w-5 text-primary" />} label="Toplam XP" value={profile.xp} />
           </section>
 
-          <section aria-labelledby="lessons-heading" className="space-y-6">
+          <section aria-labelledby="lessons-heading" className="space-y-4">
             <h2 id="lessons-heading" className="text-xl">
-              Dersler
+              Teknoloji yolları
             </h2>
-            {CATEGORIES.map((category) => (
-              <div key={category.title}>
-                <div className="mb-3 flex items-center gap-2">
-                  <span
-                    className="rounded-lg px-2 py-1 text-xs font-bold text-primary-foreground"
-                    style={{ backgroundColor: `var(--color-${LANGUAGE_META[category.language].colorVar})` }}
+            <div className="grid gap-4 sm:grid-cols-2">
+              {TRACKS.map((track) => {
+                const tp = trackProgress(track, completed);
+                const target = nextLevelInTrack(track, completed);
+                return (
+                  <Link
+                    key={track.id}
+                    to="/lesson/$level"
+                    params={{ level: String(target) }}
+                    className="card-surface flex flex-col gap-3 p-5 transition-transform hover:-translate-y-0.5"
+                    aria-label={`${track.label} yoluna devam et`}
                   >
-                    {LANGUAGE_META[category.language].label}
-                  </span>
-                  <h3 className="text-base">{category.title}</h3>
-                  <span className="text-sm text-muted-foreground">
-                    Seviye {category.from}–{category.to}
-                  </span>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {LESSONS.filter((l) => l.level >= category.from && l.level <= category.to).map((lesson) => {
-                    const isDone = completed.has(lesson.level);
-                    const isLocked = !isLessonUnlocked(lesson.level, completed);
-                    return (
-                      <LessonCard
-                        key={lesson.id}
-                        level={lesson.level}
-                        title={lesson.title}
-                        description={lesson.description}
-                        done={isDone}
-                        locked={isLocked}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="flex h-11 w-11 items-center justify-center rounded-xl text-xl"
+                        style={{ backgroundColor: `var(--color-${track.colorVar})` }}
+                      >
+                        {track.emoji}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="font-display text-base font-extrabold">{track.label}</p>
+                        <p className="truncate text-xs text-muted-foreground">{track.tagline}</p>
+                      </div>
+                      <span className="ml-auto font-display text-lg font-extrabold text-primary">%{tp.pct}</span>
+                    </div>
+                    <Progress value={tp.pct} className="h-2" aria-label={`${track.label} ilerlemesi`} />
+                    <p className="text-xs font-semibold text-muted-foreground">
+                      {tp.done}/{tp.total} ders · Seviye {track.from}–{track.to}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
           </section>
         </div>
 
